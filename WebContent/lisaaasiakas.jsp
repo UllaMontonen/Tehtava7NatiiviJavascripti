@@ -1,18 +1,16 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="scripts/main.js"></script>
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <title>Lisää asiakas</title>
 </head>
-<body onkeydown="tutkiKey(event)">>
+<body onkeydown="tutkiKey(event)">
 <form id="tiedot">
-	<table>
-		<thead>	
-			<tr>
+<table>
+	<thead>
+		<tr>
 				<th colspan="3" id="ilmo"></th>
 				<th colspan="2" class="oikealle"><a href="listaaasiakkaat.jsp">Takaisin listaukseen</a></th>
 			</tr>		
@@ -35,7 +33,6 @@
 		</tbody>
 	</table>
 </form>
-<span id="ilmo"></span>
 </body>
 <script>
 function tutkiKey(event){
@@ -91,4 +88,5 @@ function lisaaTiedot(){
 	document.getElementById("tiedot").reset(); //tyhjennetään tiedot -lomake
 }
 </script>
+</body>
 </html>

@@ -1,16 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="scripts/main.js"></script>
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <title>Muuta asiakas</title>
 </head>
 <body onkeydown="tutkiKey(event)">
 <form id="tiedot">
-	<table>
+	<table class="table">
 		<thead>	
 			<tr>
 				<th colspan="3" id="ilmo"></th>
@@ -24,34 +22,25 @@
 				<th>Hallinta</th>
 			</tr>
 		</thead>
-		<tbody>
 			<tr>
 				<td><input type="text" name="etunimi" id="etunimi"></td>
 				<td><input type="text" name="sukunimi" id="sukunimi"></td>
 				<td><input type="text" name="puhelin" id="puhelin"></td>
 				<td><input type="text" name="sposti" id="sposti"></td> 
-				<td><input type="button" id="tallenna" value="Muuta" onclick="vieTiedot()"></td>
+				<td><input type="button" name="nappi" id="tallenna" value="tallenna" onclick="vieTiedot()"></td>
 			</tr>
+		<tbody>
 		</tbody>
 	</table>
 	<input type="hidden" name="asiakas_id" id="asiakas_id">
 </form>
-<span id="ilmo"></span>
-</body>
 <script>
 
-function tutkiKeyX(event){
+function tutkiKey(event){
 	if(event.keyCode==13){//Enter
 		vieTiedot();
 	}		
 }
-
-var tutkiKey = (event) => {
-	if(event.keyCode==13){//Enter
-		vieTiedot();
-	}	
-}
-
 
 document.getElementById("etunimi").focus();//viedään kursori etunimi-kenttään sivun latauksen yhteydessä
 
@@ -66,7 +55,6 @@ document.getElementById("etunimi").focus();//viedään kursori etunimi-kenttään si
 		return response.json()
 	})
 	.then( function (responseJson) {//Otetaan vastaan objekti responseJson-parametrissä	
-		console.log(responseJson);
 		document.getElementById("etunimi").value = responseJson.etunimi;		
 		document.getElementById("sukunimi").value = responseJson.sukunimi;	
 		document.getElementById("puhelin").value = responseJson.puhelin;	
@@ -75,34 +63,20 @@ document.getElementById("etunimi").focus();//viedään kursori etunimi-kenttään si
 	});	
 //funktio tietojen muuttamista varten. Kutsutaan backin PUT-metodia ja välitetään kutsun mukana muutetut tiedot json-stringinä.
 //PUT /asiakkaat/
-function vieTiedot(){	
-	var ilmo="";
-	if(document.getElementById("etunimi").value.length<2){
-		ilmo="Etunimi liian lyhyt!";
-	}else if(document.getElementById("sukunimi").value.length<2){
-		ilmo="Sukunimi liian lyhyt!";
-	}else if(document.getElementById("puhelin").value.length<6){
-		ilmo="Numero liian lyhyt!";
-	}else if(document.getElementById("sposti").value.length<6){
-		ilmo="Osoite liian lyhyt!";
-	}
-	if(ilmo!=""){
-		document.getElementById("ilmo").innerHTML=ilmo;
-		setTimeout(function(){ document.getElementById("ilmo").innerHTML=""; }, 3000);
+function vieTiedot(){
+	var etunimi = document.getElementById("etunimi").value;
+	var sukunimi = document.getElementById("sukunimi").value;
+	var puhelin = document.getElementById("puhelin").value;
+	var sposti = document.getElementById("sposti").value;	
+	if(etunimi.length<2||sukunimi.length<2||puhelin*1!=puhelin||sposti.indexOf("@")==-1){
+		document.getElementById("ilmo").innerHTML = "Antamasi arvot eivät kelpaa!"
 		return;
-	}
-	document.getElementById("etunimi").value=siivoa(document.getElementById("etunimi").value);
-	document.getElementById("sukunimi").value=siivoa(document.getElementById("sukunimi").value);
-	document.getElementById("puhelin").value=siivoa(document.getElementById("puhelin").value);
-	document.getElementById("sposti").value=siivoa(document.getElementById("sposti").value);
 	
-	var formJsonStr=formDataToJSON(document.getElementById("tiedot")); //muutetaan lomakkeen tiedot json-stringiksi
-	console.log(formJsonStr);
-	//Lähetään muutetut tiedot backendiin
+	}
 	var formJsonStr=formDataToJSON(document.getElementById("tiedot")); //muutetaan lomakkeen tiedot json-stringiksi
 	//Lähetään uudet tiedot backendiin
 	fetch("asiakkaat",{//Lähetetään kutsu backendiin
-	      method: 'POST',
+	      method: 'PUT',
 	      body:formJsonStr
 	    })
 	.then( function (response) {//Odotetaan vastausta ja muutetaan JSON-vastaus objektiksi		
@@ -117,7 +91,8 @@ function vieTiedot(){
 		}
 		setTimeout(function(){ document.getElementById("ilmo").innerHTML=""; }, 5000);
 	});	
-	document.getElementById("tiedot").reset(); //tyhjennetään tiedot -lomake
+	//document.getElementById("tiedot").reset(); //tyhjennetään tiedot -lomake
 }
 </script>
+</body>
 </html>

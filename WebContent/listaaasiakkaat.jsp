@@ -1,37 +1,36 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="css/main.css">
-<script src="scripts/main.js"></script>
 <title>Asiakkaiden listaus</title>
 </head>
 <body onkeydown="tutkiKey(event)">
+
 	<table id="listaus">
 		<thead>	
 			<tr>
-			<th colspan="3" class="oikealle" id="ilmo"></th>
-			<th colspan="2"><a id="uusiAsiakas" href="lisaaasiakas.jsp">Lisää uusi asiakas</a></th>
-		</tr>
+			<th colspan="4" id="ilmo" class="oikealle">
+			<th colspan="1"><a id="uusiAsiakas" href="lisaaasiakas.jsp">Lisää uusi asiakas</a></th>
+			</tr>
 		<tr>
 			<th colspan="3" class="oikealle">Hakusana:</th>
 			<th><input type="text" id="hakusana"></th>
-			<th><input type="button" value="hae" id="hakunappi" onclick="haeTiedot()"></th>
+			<th><input type="button" value="hae" id="hae" onclick="haeTiedot()"></th>
 		</tr>		
 		<tr>
 				<th>Etunimi</th>
 				<th>Sukunimi</th>
 				<th>Puhelin</th>
 				<th>Sposti</th>
-				<th>&nbsp;</th>				
+				<th></th>				
 			</tr>
 		</thead>
 		<tbody id="tbody">
 		</tbody>
 	</table>
 <script>
+
 haeTiedot();	
 document.getElementById("hakusana").focus();//viedään kursori hakusana-kenttään sivun latauksen yhteydessä
 
@@ -52,10 +51,9 @@ function haeTiedot(){
 	})
 	.then(function (responseJson) {//Otetaan vastaan objekti responseJson-parametrissä		
 		var asiakkaat = responseJson.asiakkaat;	
-        var htmlStr;
+        var htmlStr="";
         for(var i=0;i<asiakkaat.length;i++){
         	htmlStr+="<tr>";
-        	htmlStr+="<tr id='rivi_"+asiakkaat[i].asiakas_id+"'>";
         	htmlStr+="<td>"+asiakkaat[i].etunimi+"</td>";
         	htmlStr+="<td>"+asiakkaat[i].sukunimi+"</td>";
         	htmlStr+="<td>"+asiakkaat[i].puhelin+"</td>";
